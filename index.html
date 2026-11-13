@@ -1,0 +1,133 @@
+# Coffee Connection Cafe — Website Implementation Plan
+
+A warm, luxury editorial web presence for **Coffee Connection Cafe** (Utran, Surat, Gujarat) designed to showcase its 24-hour cafe atmosphere, invite walk-in visits via instant directions and click-to-call/WhatsApp actions, and let the owner customize placeholder menu items and customer reviews directly in the browser.
+
+---
+
+### User Review & Critical Decisions
+
+> [!IMPORTANT]
+> The choices below were confirmed during clarification and govern the design and interaction behavior across the application.
+
+- **Confirmed Visual Direction**: Warm luxury editorial aesthetic pairing expressive serif display headings with crisp sans-serif body typography, anchored in the brand palette (`#3B2418` Dark Coffee Brown, `#F5EBDD` Cream, `#C58B45` Caramel Gold, `#FFF9F0` Warm Off-White, `#24160F` Dark Espresso).
+- **Confirmed Placeholder & Owner Edit Strategy**: All menu items across the 6 categories and all review cards will be clearly labeled as customizable placeholders (with zero fabricated dishes, prices, or customer testimonials). An optional **Owner Edit Mode** (persisted in browser `localStorage` with JSON export and reset controls) allows the cafe owner to customize items and reviews live.
+- **Confirmed "Visit Us" CTA Action**: Clicking the highlighted **Visit Us** button in the top navigation bar smoothly scrolls the visitor directly to the **Location & Embedded Map** section (`#location`).
+- **Imagery & Authenticity Notice**: High-resolution coffee, latte art, cold beverage, dessert, and cozy cafe atmosphere visuals will be generated as bespoke editorial assets and clearly framed as curated mood visuals until the owner replaces them with photographs of the actual premises.
+
+---
+
+### 1. Overview & Core Concept
+
+- **What It Does**: Delivers a mobile-first, responsive single-page cafe showcase that turns local Surat coffee seekers into walk-in guests—highlighting 24-hour availability, 4.9/5 rating across 86 Google reviews, interactive menu category browsing, a lightbox photo gallery, embedded Google Maps navigation, and one-tap Call / WhatsApp contact.
+- **Target Audience / Persona**:
+  - *Cafe Visitors in Surat*: Young professionals, students, late-night coffee lovers, and families near VIP Circle / Utran browsing on smartphones for menu categories, vibe, hours, and directions.
+  - *Cafe Owner*: Reviewing the initial launch site and optionally using Owner Edit Mode to swap placeholder items, prices, and real Google reviews before publishing.
+- **Key Value**: Establishes immediate brand trust on par with international coffee houses while keeping all business facts strictly accurate and actionable.
+
+---
+
+### 2. User Experience & Visual Design
+
+- **Key User Flows**:
+  1. **Branded Arrival**: A fast, graceful coffee-cup steam loader introduces the page (`<= 800ms`, skipped automatically when `prefers-reduced-motion` is enabled), revealing the full-bleed hero with `"Your Perfect Coffee Connection."` and two clear CTAs (`Explore Our Menu` and `Get Directions`).
+  2. **Story & Proof Discovery**: Visitors scroll through `"More Than Just Coffee"` (atmosphere, 24-hour welcome, `₹200–₹400` price range) into the 4-card `"Why Choose Us?"` section (`4.9/5` rating, Coffee Experience, Open 24 Hours, Near VIP Circle, Utran).
+  3. **Interactive Menu Exploration**: Visitors filter across `All`, `Hot Coffee`, `Cold Coffee`, `Frappes & Shakes`, `Tea & Refreshments`, `Snacks`, and `Desserts`. Each card clearly marks sample slots ready for owner customization.
+  4. **Gallery & Lightbox**: Visitors browse coffee art, cold brews, desserts, and interior mood photography, clicking any frame to inspect it in an accessible lightbox modal.
+  5. **Visit, Call & WhatsApp Conversion**: Clicking **Visit Us**, **Get Directions**, **Call Now**, or the floating **WhatsApp** button connects directly to `+91 95370 98370`, `https://wa.me/919537098370`, or Google Maps (`Coffee Connection Cafe Utran Surat`), reinforced by an interactive embedded map and quick WhatsApp inquiry builder.
+  6. **Owner Edit Mode (Optional)**: Accessible via a discreet toggle in the footer (or subtle edit bar when active), allowing inline editing/adding/removing of sample menu items and review placeholders, plus Export JSON and Reset Defaults.
+
+- **Visual Identity & Theme**:
+  - *Aesthetic Direction*: Warm Luxury Editorial Cafe — rich dark roast depth paired with sunlit travertine/cream paper surfaces, hairline caramel-gold dividers, and high-resolution editorial photography.
+  - *Color Palette & Mood* (60-30-10 discipline):
+    - **60% Dominant Neutral Canvas**: Warm Off-White (`#FFF9F0`) for airy reading sections, paired with Dark Espresso (`#24160F`) for the hero/footer anchors.
+    - **30% Structural Surfaces**: Cream (`#F5EBDD`) and soft `#FBF4EA` surface cards with subtle hairline borders (`rgba(59, 36, 24, 0.12)`).
+    - **10% Accent Budget**: Caramel Gold (`#C58B45`, high-contrast `#9E6B2E` on light surfaces for WCAG AA compliance) reserved strictly for primary CTAs, active category tabs, and star highlights; Primary Dark Coffee Brown (`#3B2418`) for structural buttons and ink.
+  - *Typography & Hierarchy* (2-font editorial pairing + tabular numerals):
+    - **Display / Headings**: `Cormorant Garamond` (600/700) with `text-wrap: balance` and `clamp(2.5rem, 5vw, 4.25rem)` hero scale.
+    - **Body & Controls**: `Plus Jakarta Sans` (400/500/600), 15px–16px body prose at `1.65` line-height, single-line (`whitespace-nowrap`) navigation and action buttons.
+    - **Metrics & Pricing**: `tabular-nums` on ratings (`4.9/5`), review counts (`86`), hours (`24`), and price ranges (`₹200–₹400`).
+  - *Top Navigation Contract*: Single-row sticky header with 3 clean zones: single-line wordmark (`Coffee Connection Cafe`) — 6 concise single-line nav links (`Home`, `About`, `Menu`, `Gallery`, `Reviews`, `Contact`) — 1 highlighted primary CTA (`Visit Us`), collapsing cleanly into a mobile hamburger drawer (`<= 15%` viewport height sticky budget across header + floating WhatsApp button).
+  - *Anti-Slop Restraint*: Unboxed inline metadata separated by `·` (no pill badge clusters), no thick left accent borders (`border-l-4`), no pulsing decorative status dots, no fabricated customer names or dish names, and measured dark scrims over all photography (`>= 4.5:1` text contrast).
+
+- **Interactive Feedback & Motion**:
+  - Subtle compositor-only (`transform`, `opacity`) scroll-triggered section reveals via Framer Motion (`motion/react`) with `viewport={{ once: true }}` and `prefers-reduced-motion` respect.
+  - Subtle hero background parallax on scroll, crisp `<= 200ms` button hover transitions, tab underline/active state slides, lightbox zoom modal, and non-intrusive toast notifications when copying contact details or saving Owner Edit changes.
+
+---
+
+### 3. Key Product Decisions & Trade-Offs
+
+- **Decision 1: Zero-Key Embedded Google Map + Direct Directions Link**
+  - *Chosen Approach*: Embed Google Maps for `Coffee Connection Cafe, Silver Business Point, Near VIP Circle, Utran, Surat, Gujarat 394105` via standard Google Maps embed iframe paired with a rich fallback location card and the direct Google Maps URL (`https://www.google.com/maps/search/?api=1&query=Coffee+Connection+Cafe+Utran+Surat`).
+  - *Why*: Visitors get an interactive pan/zoom map immediately with zero API key setup, zero risk of hitting daily free-tier quota limits in production, and instant deep-linking into the native Google Maps app on mobile devices.
+  - *Alternatives Considered*: Full Google Maps JavaScript SDK with custom markers (requires Cloud project billing/API key maintenance by the cafe owner).
+
+- **Decision 2: Client-Side Owner Edit Mode with `localStorage` & JSON Export**
+  - *Chosen Approach*: Store customizable menu placeholders and review slots in React state backed by `localStorage`, complete with an optional `"Owner Edit Mode"` toggle, inline item/review editor modal, `"Reset Placeholders"` button, and `"Export Config JSON"` action.
+  - *Why*: Satisfies the requirement for clearly marked editable placeholders without inventing real menu items or requiring a backend database/login system, while giving the owner an immediate, interactive way to preview real items on the live layout.
+  - *Alternatives Considered*: Static read-only code placeholders only (harder for a non-technical owner to preview changes live) or a full database-backed CMS (overkill and introduces auth/hosting overhead for a brochure site).
+
+- **Decision 3: Bespoke Generated Editorial Coffee & Cafe Imagery**
+  - *Chosen Approach*: Generate high-fidelity cohesive assets in a single parallel batch (`16:9` hero coffee bar atmosphere, `4:3` hot cappuccino latte art, `4:3` iced coffee & caramel frappe, `4:3` artisan tea/snacks & dessert plating, `4:3` cozy interior lounge mood) paired with styled SVG fallback containers.
+  - *Why*: Eliminates fragile external stock URLs and ensures warm, consistent lighting that matches `#3B2418` and `#C58B45`, while explicitly labeling gallery/menu placeholders so nothing masquerades as real premises photos.
+
+---
+
+### 4. Technical Architecture & Data Strategy *(Technical Reference)*
+
+- **Architecture & Component Diagram**:
+
+```text
+┌──────────────────────────────────────────────────────────────────────────┐
+│                        Browser State & Persistence                       │
+│  [Default Sample Catalog + Reviews] <──> [localStorage: ccc_owner_data]  │
+│  Active UI State: menuCategory | lightboxItem | mobileMenu | ownerMode   │
+└───────────────────────────────────┬──────────────────────────────────────┘
+                                    │
+                                    ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                          Application Shell                               │
+│  ┌────────────────────────────────────────────────────────────────────┐  │
+│  │ Branded Coffee Steam Intro Loader  |  Sticky 3-Zone Top Navbar     │  │
+│  └────────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  ┌──────────────────────┐  ┌──────────────────────┐  ┌────────────────┐  │
+│  │ Hero (Parallax +     │  │ About ("More Than   │  │ Why Choose Us  │  │
+│  │ 4.9/5 Proof + CTAs)  │─>│ Just Coffee" + Facts)│─>│ (4 Pillars)    │  │
+│  └──────────────────────┘  └──────────────────────┘  └────────────────┘  │
+│                                                                          │
+│  ┌──────────────────────┐  ┌──────────────────────┐  ┌────────────────┐  │
+│  │ Interactive Menu     │  │ Editorial Gallery    │  │ Customer       │  │
+│  │ (6 Category Filters  │─>│ (Masonry Grid +      │─>│ Reviews (4.9/5 │  │
+│  │ + Placeholder Cards) │  │ Lightbox Modal)      │  │ · 86 Slots)    │  │
+│  └──────────┬───────────┘  └──────────────────────┘  └───────┬────────┘  │
+│             │ (when Owner Mode active)                       │           │
+│             ▼                                                ▼           │
+│  ┌────────────────────────────────────────────────────────────────────┐  │
+│  │ Owner Edit Drawer / Modal (Edit Menu Items, Reviews, Export JSON)  │  │
+│  └────────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  ┌────────────────────────────────────┐  ┌────────────────────────────┐  │
+│  │ Location ("Find Your Coffee        │  │ Contact & Quick WhatsApp   │  │
+│  │ Connection" + Google Maps Embed)   │─>│ Message Composer + Footer  │  │
+│  └────────────────────────────────────┘  └────────────────────────────┘  │
+│                                                                          │
+│  ┌────────────────────────────────────────────────────────────────────┐  │
+│  │ Floating WhatsApp Action Button + Toast Feedback Layer             │  │
+│  └────────────────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────┘
+```
+
+- **Data Model & State**:
+  - `BusinessInfo` (immutable factual constants): Name, address lines, phone (`+91 95370 98370`), WhatsApp URL, Maps URL, rating (`4.9`), review count (`86`), price range (`₹200–₹400 per person`), hours (`Open 24 Hours`).
+  - `MenuCategory`: `'All' | 'Hot Coffee' | 'Cold Coffee' | 'Frappes & Shakes' | 'Tea & Refreshments' | 'Snacks' | 'Desserts'`.
+  - `MenuItem`: `{ id, category, title, description, pricePlaceholder, isSamplePlaceholder, imageKey }`.
+  - `ReviewSlot`: `{ id, authorLabel, dateLabel, rating, quote, isPlaceholder }`.
+  - `GalleryItem`: `{ id, title, caption, category, imageSrc, aspectClass }`.
+
+- **Interactive Component & State Mapping**:
+  - **Category Filter Bar**: Updates `activeCategory` state with smooth animated transitions; displays filtered items or empty-state prompt with `"Add Item"` button in Owner Mode.
+  - **Owner Edit Mode**: Toggled from footer (`"Owner Customize Mode"`); unlocks `"Edit"` / `"+ Add"` controls on Menu and Reviews sections, persists edits in `localStorage`, validates non-empty titles, and offers `"Export JSON"` (clipboard/download) + `"Reset Placeholders"`.
+  - **Gallery Lightbox**: Clicking any gallery card opens an accessible modal (`Esc` to close, next/prev arrow navigation, keyboard focus management).
+  - **Contact & Quick WhatsApp Composer**: Pre-fills a customer inquiry (e.g., table availability, late-night visit, group meetup) and launches `https://wa.me/919537098370?text=...`, alongside direct `tel:+919537098370` and copy-address/copy-phone actions with visual toast confirmation.
+  - **SEO & Metadata**: Configures `<title>`, `<meta name="description">`, OpenGraph tags, and a `LocalBusiness` (`CafeOrCoffeeShop`) JSON-LD script block inside the document head, plus updates `metadata.json`.
